@@ -16,6 +16,9 @@ orbs:
 
 workflows:
   main:
+    when:
+      not:
+        equal: ['', << pipeline.git.tag >>'']
     jobs:
       - foo-orb/foo-job:
           foo-param: << pipeline.git.tag >>
