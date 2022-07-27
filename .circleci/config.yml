@@ -1,0 +1,26 @@
+version: 2.1
+
+orbs:
+  foo-orb:
+    jobs:
+      foo-job:
+        docker:
+          - image: cimg/base:2022.07
+        parameters:
+          foo-param:
+            type: string
+            description: some orb defined parameter that's out of orb users' control
+        steps:
+          - run:
+              command: echo << parameters.foo-param >>
+
+workflows:
+  main:
+    jobs:
+      - foo-orb/foo-job:
+          foo-param: << pipeline.git.tag >>
+          filters:
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+(\-[0-9a-z]+)?+$/
+            branches:
+              ignore: /.*/
